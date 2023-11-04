@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body>
+    <form th:action="@{/check}" th:object="${test}" method="post">
+        <h1>Danh sách có thể đánh dấu được</h1>
+        <ul id="sortable-list" class="sortable-list">
+            <li class="sortable-item">
+                <input type="checkbox" th:field="*{options[0].checked}">
+                <input type="hidden" th:field="*{options[0].name}">
+                <span th:text="*{options[0].name}"></span>
+                <input type="text" placeholder="loại món ăn" th:field="*{desiredType}">
+            </li>
+            <li class="sortable-item">
+                <input type="checkbox" th:field="*{options[1].checked}">
+                <input type="hidden" th:field="*{options[1].name}">
+                <span th:text="*{options[1].name}"></span>
+                <input type="text" placeholder="ngân sách" th:field="*{budget}">
+            </li>
+            <li class="sortable-item">
+                <input type="checkbox" th:field="*{options[2].checked}">
+                <input type="hidden" th:field="*{options[2].name}">
+                <span th:text="*{options[2].name}"></span>
+                <input type="text" placeholder="phút" th:field="*{desiredTimeMinute}">
+                <span> : </span>
+                <input type="text" placeholder="giây" th:field="*{desiredTimeSecond}">
+            </li>
+            <li class="sortable-item">
+                <input type="checkbox" th:field="*{options[3].checked}">
+                <input type="hidden" th:field="*{options[3].name}">
+                <span th:text="*{options[3].name}"></span>
+                <select th:field="*{desiredNutrition}">
+                    <option value=""></option>
+                    <option value="Ăn rất no">Ăn rất no</option>
+                    <option value="Ăn no">Ăn no</option>
+                    <option value="Ăn vừa">Ăn vừa</option>
+                    <option value="Ăn ít">Ăn ít</option>
+                    <option value="Ăn rất ít">Ăn rất ít</option>
+                </select>
+            </li>
+            <li class="sortable-item">
+                <input type="checkbox" th:field="*{options[4].checked}">
+                <input type="hidden" th:field="*{options[4].name}">
+                <span th:text="*{options[4].name}"></span>
+                <select th:field="*{desiredFat}">
+                    <option value=""></option>
+                    <option value="Ăn kiêng">Ăn kiêng</option>
+                    <option value="Ăn bình thường">Ăn bình thường</option>
+                    <option value="Ăn tăng cân">Ăn tăng cân</option>
+                </select>
+            </li>
+            <li class="sortable-item">
+                <input type="checkbox" th:field="*{options[5].checked}">
+                <input type="hidden" th:field="*{options[5].name}">
+                <span th:text="*{options[5].name}"></span>
+            </li>
+        </ul>
+        <script>
+            new Sortable(document.getElementById('sortable-list'), {
+                animation: 150
+            });
+        </script>
+        <button type="submit">test</button>
+        <br>
+    </form>
+</body>
+</html>
