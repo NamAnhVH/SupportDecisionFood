@@ -8,10 +8,12 @@ import lombok.Setter;
 public class Option {
     private String name;
     private boolean checked;
+    private int rank;
 
-    public Option(String name, boolean checked){
+    public Option(String name, boolean checked, int rank){
         this.name = name;
         this.checked = checked;
+        this.rank = rank;
     }
 
     public Option(){

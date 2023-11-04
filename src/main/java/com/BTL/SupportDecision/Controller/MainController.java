@@ -26,12 +26,12 @@ public class MainController {
     @GetMapping()
     public String mainPage(Model model){
         List<Option> options = Arrays.asList(
-                new Option("Loại món ăn", false),
-                new Option("Ngân sách", false),
-                new Option("Thời gian chuẩn bị", false),
-                new Option("Chế độ ăn uống", false),
-                new Option("Lượng dinh dưỡng", false),
-                new Option("Bữa ăn", false)
+                new Option("Loại món ăn", false, 0),
+                new Option("Ngân sách", false, 0),
+                new Option("Thời gian chuẩn bị", false, 0),
+                new Option("Chế độ ăn uống", false, 0),
+                new Option("Lượng dinh dưỡng", false, 0),
+                new Option("Bữa ăn", false, 0)
         );
         model.addAttribute("test", new UserSelectionDto(options));
         return "mainPage";
@@ -39,6 +39,10 @@ public class MainController {
 
     @PostMapping("/check")
     public String supportDecision(Model model, @ModelAttribute UserSelectionDto userSelection){
+        List<Option> rankedOptionList = userSelection.getOptions()
+                .stream()
+                .filter(option -> option.getRank() > 0)
+                .collect(Collectors.toList());
         List<Option> selectedOptions = userSelection.getOptions().stream().filter(Option::isChecked).collect(Collectors.toList());
         for(Option selectedOption: selectedOptions){
             System.out.println(selectedOption.getName());
