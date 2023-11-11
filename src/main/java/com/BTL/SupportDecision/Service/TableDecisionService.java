@@ -50,17 +50,17 @@ public class TableDecisionService {
     private void calculateAttribute(UserSelectionDto userSelectionDto, List<Dish> listDish) {
         sastisfactionType = calculateSatisfactionType(userSelectionDto.getDesiredType(), listDish);
         satisfactionBudget = calculateSatisfactionBudget(userSelectionDto.getBudget(), listDish);
-        satisfactionPreparationTime = calculateSatisfactionPreparationTime(userSelectionDto.getDesiredTimeMinute(), userSelectionDto.getDesiredTimeSecond(), listDish);
+        satisfactionPreparationTime = calculateSatisfactionPreparationTime(userSelectionDto.getDesiredTimeMinute(), listDish);
         satisfactionNutrition = calculateSatisfactionNutrition(userSelectionDto.getDesiredNutrition(), listDish);
         satisfactionFat = calculateSatisfactionFat(userSelectionDto.getDesiredFat(), listDish);
         satisfactionMealTime = calculateSatisfactionMealTime(listDish);
     }
 
     private void normalizedAttribute() {
-        normalizedMinBetterAttribute(satisfactionBudget);
-        normalizedMinBetterAttribute(satisfactionPreparationTime);
-        normalizedMaxBetterAttribute(satisfactionNutrition);
-        normalizedMaxBetterAttribute(satisfactionFat);
+        normalizedAttribute(satisfactionBudget);
+        normalizedAttribute(satisfactionPreparationTime);
+        normalizedAttribute(satisfactionNutrition);
+        normalizedAttribute(satisfactionFat);
     }
 
     private Map<Dish, Double> calculateSatisfactionType(String type, List<Dish> listDish){
@@ -80,10 +80,10 @@ public class TableDecisionService {
         return sastisfactionAttribute;
     }
 
-    private Map<Dish, Double> calculateSatisfactionPreparationTime(int minute, int second, List<Dish> listDish){
+    private Map<Dish, Double> calculateSatisfactionPreparationTime(int minute, List<Dish> listDish){
         Map <Dish,Double> sastisfactionAttribute = new Hashtable<>();
         for(Dish dish: listDish){
-            double value = Math.abs(TIME_PRIORITY_INDEX * calculateTimeSecond(minute, second) - dish.getPrepareTime());
+            double value = Math.abs(TIME_PRIORITY_INDEX * minute - dish.getPrepareTime());
             sastisfactionAttribute.put(dish, value);
         }
         return sastisfactionAttribute;
@@ -118,12 +118,14 @@ public class TableDecisionService {
                     break;
                 }
             }
-            sastisfactionAttribute.put(dish, (double)0);
+            if(!sastisfactionAttribute.containsKey(dish)){
+                sastisfactionAttribute.put(dish, (double)0);
+            }
         }
         return sastisfactionAttribute;
     }
 
-    private void normalizedMinBetterAttribute(Map<Dish, Double> attribute) {
+    private void normalizedAttribute(Map<Dish, Double> attribute) {
         double maxValue = 0;
         double minValue = Double.MAX_VALUE;
         for(Map.Entry<Dish, Double> attr: attribute.entrySet()){
@@ -134,23 +136,6 @@ public class TableDecisionService {
             double value = (maxValue - attr.getValue()) / (maxValue - minValue);
             attr.setValue(value);
         }
-    }
-
-    private void normalizedMaxBetterAttribute(Map<Dish, Double> attribute) {
-        double maxValue = 0;
-        double minValue = Double.MAX_VALUE;
-        for(Map.Entry<Dish, Double> attr: attribute.entrySet()){
-            maxValue = attr.getValue() > maxValue ? attr.getValue() : maxValue;
-            minValue = attr.getValue() < minValue ? attr.getValue() : minValue;
-        }
-        for(Map.Entry<Dish, Double> attr: attribute.entrySet()){
-            double value = (attr.getValue() - minValue) / (maxValue - minValue);
-            attr.setValue(value);
-        }
-    }
-
-    private int calculateTimeSecond(int minute, int second){
-        return minute * 60 + second;
     }
 
     private MealTime calculateTimeMeal(LocalTime time){

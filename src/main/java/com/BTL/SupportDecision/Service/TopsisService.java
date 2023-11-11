@@ -15,6 +15,8 @@ public class TopsisService {
     private Map<Dish, Double> distanceToWorstSolution;
     private Map<Dish, Double> similarity;
 
+    private static final int NUMBER_OF_SUITABLE_DISH = 5;
+
     public List<Dish> findMostSuitableDish(List<Dish> listDish, TableDecisionService tableDecisionService) {
         List<Dish> mostSuitableDishes = new ArrayList<>();
 
@@ -23,13 +25,10 @@ public class TopsisService {
         distanceToBestSolution = calculateDistanceToBestSolution(listDish,tableDecisionService);
         distanceToWorstSolution = calculateDistanceToWorstSolution(listDish,tableDecisionService);
         similarity = calculateSimilarity(listDish);
+
         List<Map.Entry<Dish, Double>> entryList = new ArrayList<>(similarity.entrySet());
-
-        // Sắp xếp entryList theo giá trị giảm dần
         entryList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-
-        // Lấy n giá trị đầu tiên
-        List<Map.Entry<Dish, Double>> topEntries = entryList.subList(0, Math.min(3, entryList.size()));
+        List<Map.Entry<Dish, Double>> topEntries = entryList.subList(0, Math.min(NUMBER_OF_SUITABLE_DISH, entryList.size()));
         for (Map.Entry<Dish, Double> entry : topEntries) {
             mostSuitableDishes.add(entry.getKey());
         }

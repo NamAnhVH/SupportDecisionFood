@@ -10,7 +10,6 @@ import java.util.List;
 public class UserSelectionDto {
     private String desiredType;
     private int desiredTimeMinute;
-    private int desiredTimeSecond;
     private int budget;
     private String desiredNutrition;
     private String desiredFat;
