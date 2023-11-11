@@ -21,5 +21,5 @@ public class UserSelectionDto {
         this.options = options;
     }
 
-    private List<Option> selectedOptions;
+
 }

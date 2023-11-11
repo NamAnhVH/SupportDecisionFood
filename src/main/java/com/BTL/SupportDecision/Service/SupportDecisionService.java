@@ -24,16 +24,18 @@ public class SupportDecisionService {
     private TableDecisionService tableDecisionService;
     @Autowired
     private AttributeWeightService attributeWeightService;
+    @Autowired
+    private TopsisService topsisService;
 
-    public Dish getSuggestedDish(UserSelectionDto userSelection){
+    public List<Dish> getSuggestedDish(UserSelectionDto userSelection){
         List<Dish> listDish = dishRepository.findAll();
         tableDecisionService.createTableDecision(listDish, userSelection);
-        attributeWeightService.calculateWeight(userSelection);
-        for(Dish dish: listDish){
-            return dish;
-        }
-        return null;
+        attributeWeightService.calculateWeight(userSelection.getOptions());
+        tableDecisionService.calculateAttributeValueByWeight(attributeWeightService);
+        List<Dish> mostSuitableDishes = topsisService.findMostSuitableDish(listDish, tableDecisionService);
+        return mostSuitableDishes;
     }
+
 
 
 

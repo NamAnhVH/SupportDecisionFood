@@ -8,24 +8,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
-    <form th:action="@{/check}" th:object="${test}" method="post">
+    <form th:action="@{/check}" th:object="${test}" method="post" id="myForm">
         <h1>Danh sách có thể đánh dấu được</h1>
         <ul id="sortable-list" class="sortable-list">
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[0].checked}">
                 <input type="hidden" th:field="*{options[0].name}">
+                <input type="hidden" th:field="*{options[0].position}" class="position">
                 <span th:text="*{options[0].name}"></span>
-                <input type="text" placeholder="loại món ăn" th:field="*{desiredType}">
+                <select th:field="*{desiredType}">
+                    <option value=""></option>
+                    <option value="Bún">Bún</option>
+                    <option value="Cơm">Cơm</option>
+                    <option value="Phở">Phở</option>
+                    <option value="Sườn heo">Sườn heo</option>
+                </select>
             </li>
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[1].checked}">
                 <input type="hidden" th:field="*{options[1].name}">
+                <input type="hidden" th:field="*{options[1].position}" class="position">
                 <span th:text="*{options[1].name}"></span>
                 <input type="text" placeholder="ngân sách" th:field="*{budget}">
             </li>
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[2].checked}">
                 <input type="hidden" th:field="*{options[2].name}">
+                <input type="hidden" th:field="*{options[2].position}" class="position">
                 <span th:text="*{options[2].name}"></span>
                 <input type="text" placeholder="phút" th:field="*{desiredTimeMinute}">
                 <span> : </span>
@@ -34,19 +43,21 @@
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[3].checked}">
                 <input type="hidden" th:field="*{options[3].name}">
+                <input type="hidden" th:field="*{options[3].position}" class="position">
                 <span th:text="*{options[3].name}"></span>
                 <select th:field="*{desiredNutrition}">
                     <option value=""></option>
-                    <option value="Ăn rất no">Ăn rất no</option>
-                    <option value="Ăn no">Ăn no</option>
-                    <option value="Ăn vừa">Ăn vừa</option>
-                    <option value="Ăn ít">Ăn ít</option>
-                    <option value="Ăn rất ít">Ăn rất ít</option>
+                    <option value="Rất giàu năng lượng">Rất giàu năng lượng</option>
+                    <option value="Giàu năng lượng">Giàu năng lượng</option>
+                    <option value="Vừa năng lượng">Vừa năng lượng</option>
+                    <option value="Ít năng lượng">Ít năng lượng</option>
+                    <option value="Rất ít năng lượng">Rất ít năng lượng</option>
                 </select>
             </li>
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[4].checked}">
                 <input type="hidden" th:field="*{options[4].name}">
+                <input type="hidden" th:field="*{options[4].position}" class="position">
                 <span th:text="*{options[4].name}"></span>
                 <select th:field="*{desiredFat}">
                     <option value=""></option>
@@ -58,12 +69,25 @@
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[5].checked}">
                 <input type="hidden" th:field="*{options[5].name}">
+                <input type="hidden" th:field="*{options[5].position}" class="position">
                 <span th:text="*{options[5].name}"></span>
             </li>
         </ul>
         <script>
-            new Sortable(document.getElementById('sortable-list'), {
-                animation: 150
+             document.addEventListener('DOMContentLoaded', function() {
+                var options = document.getElementsByClassName('position');
+                for (var i = 0; i < options.length; i++) {
+                    options[i].value = i;
+                }
+            });
+            var sortableList = new Sortable(document.getElementById('sortable-list'), {
+                animation: 150,
+                onEnd: function (evt) {
+                    var options = document.getElementsByClassName('position');
+                    for (var i = 0; i < options.length; i++) {
+                        options[i].value = i + 1;
+                    }
+                }
             });
         </script>
         <button type="submit">test</button>
