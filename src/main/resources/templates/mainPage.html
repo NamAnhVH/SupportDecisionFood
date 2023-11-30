@@ -9,7 +9,7 @@
 </head>
 <body>
     <form th:action="@{/check}" th:object="${test}" method="post" id="myForm">
-        <h1>Danh sách có thể đánh dấu được</h1>
+        <h1>Lựa chọn của người dùng</h1>
         <ul id="sortable-list" class="sortable-list">
             <li class="sortable-item">
                 <input type="checkbox" th:field="*{options[0].checked}">
@@ -91,5 +91,28 @@
         <button type="submit">test</button>
         <br>
     </form>
+
+    <div>
+        <table>
+            <tr>
+                <th>Số thứ tự</th>
+                <th>Tên món ăn</th>
+                <th>Loại món ăn</th>
+                <th>Giá cả</th>
+                <th>Thời gian chuẩn bị</th>
+                <th>Lượng calories</th>
+                <th>Lượng chất béo</th>
+            </tr>
+            <tr th:each="dish, stat: ${dishes}">
+                <td th:text="${stat.index + 1}"></td>
+                <td th:text="${dish.name}"></td>
+                <td th:text="${dish.type}"></td>
+                <td th:text="${dish.price} + ' VND'"></td>
+                <td th:text="${dish.prepareTime} + ' phút'"></td>
+                <td th:text="${dish.calories} + ' kcal'"></td>
+                <td th:text="${dish.fat} + ' g'"></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

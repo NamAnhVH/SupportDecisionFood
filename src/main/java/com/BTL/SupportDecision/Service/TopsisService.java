@@ -9,6 +9,7 @@ import java.util.*;
 @Service
 public class TopsisService {
 
+
     private List<Double> bestSolution;
     private List<Double> worstSolution;
     private Map<Dish, Double> distanceToBestSolution;
@@ -17,6 +18,11 @@ public class TopsisService {
 
     private static final int NUMBER_OF_SUITABLE_DISH = 5;
 
+    /**
+     * @param listDish Danh sách món ăn trong cơ sở dữ liệu
+     * @param tableDecisionService
+     * @return
+     */
     public List<Dish> findMostSuitableDish(List<Dish> listDish, TableDecisionService tableDecisionService) {
         List<Dish> mostSuitableDishes = new ArrayList<>();
 
