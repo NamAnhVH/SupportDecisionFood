@@ -108,21 +108,22 @@ public class TableDecisionService {
     }
 
     private Map<Dish, Double> calculateSatisfactionMealTime(List<Dish> listDish){
-        Map <Dish,Double> sastisfactionAttribute = new Hashtable<>();
+        Map <Dish,Double> satisfactionAttribute = new Hashtable<>();
         LocalTime time = LocalTime.now();
+        String mealTime = String.valueOf(calculateTimeMeal(time));
         for(Dish dish: listDish){
             List<Meal> listMeal = mealRepository.findByDishId(dish.getId());
             for(Meal meal: listMeal){
-                if(meal.getMeal().equals(calculateTimeMeal(time).getValue())){
-                    sastisfactionAttribute.put(dish, (double)1);
+                if(meal.getMeal().equals(mealTime)){
+                    satisfactionAttribute.put(dish, (double)1);
                     break;
                 }
             }
-            if(!sastisfactionAttribute.containsKey(dish)){
-                sastisfactionAttribute.put(dish, (double)0);
+            if(!satisfactionAttribute.containsKey(dish)){
+                satisfactionAttribute.put(dish, (double)0);
             }
         }
-        return sastisfactionAttribute;
+        return satisfactionAttribute;
     }
 
     private void normalizedAttribute(Map<Dish, Double> attribute) {
@@ -142,11 +143,8 @@ public class TableDecisionService {
         if(time.getHour() >= 5 && time.getHour() < 11){
             return MealTime.BREAKFAST;
         }
-        if(time.getHour() >= 11 && time.getHour() < 13){
+        if(time.getHour() >= 11 && time.getHour() < 15){
             return MealTime.LUNCH;
-        }
-        if(time.getHour() >= 13 && time.getHour() < 18){
-            return MealTime.AFTERNOON;
         }
         return MealTime.DINNER;
     }

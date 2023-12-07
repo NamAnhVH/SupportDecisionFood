@@ -32,8 +32,7 @@ public class SupportDecisionService {
         tableDecisionService.createTableDecision(listDish, userSelection);
         attributeWeightService.calculateWeight(userSelection.getOptions());
         tableDecisionService.calculateAttributeValueByWeight(attributeWeightService);
-        List<Dish> mostSuitableDishes = topsisService.findMostSuitableDish(listDish, tableDecisionService);
-        return mostSuitableDishes;
+        return topsisService.findMostSuitableDish(listDish, tableDecisionService);
     }
 
 }
