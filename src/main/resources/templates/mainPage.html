@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <div class="content">
+        <form th:action="@{/check}" th:object="${test}" method="post" id="myForm">
+            <h1>Lựa chọn của người dùng</h1>
+            <ul id="sortable-list" class="sortable-list">
+                <li class="sortable-item">
+                    <input type="checkbox" th:field="*{options[0].checked}">
+                    <input type="hidden" th:field="*{options[0].name}">
+                    <input type="hidden" th:field="*{options[0].position}" class="position">
+                    <span th:text="*{options[0].name}"></span>
+                    <select th:field="*{desiredType}">
+                        <option value=""></option>
+                        <option value="Bún">Bún</option>
+                        <option value="Cơm">Cơm</option>
+                        <option value="Phở">Phở</option>
+                        <option value="Gà">Gà</option>
+                        <option value="Trứng">Trứng</option>
+                        <option value="Đậu hũ">Đậu hũ</option>
+                        <option value="Cá">Cá</option>
+                        <option value="Tôm">Tôm</option>
+                        <option value="Sườn heo">Sườn heo</option>
+                        <option value="Thịt heo">Thịt heo</option>
+                        <option value="Thịt bò">Thịt bò</option>
+                        <option value="Canh">Canh</option>
+                        <option value="Dê">Dê</option>
+                        <option value="Mực">Mực</option>
+                    </select>
+                </li>
+                <li class="sortable-item">
+                    <input type="checkbox" th:field="*{options[1].checked}">
+                    <input type="hidden" th:field="*{options[1].name}">
+                    <input type="hidden" th:field="*{options[1].position}" class="position">
+                    <span th:text="*{options[1].name}"></span>
+                    <input type="text" placeholder="ngân sách" th:field="*{budget}">
+                </li>
+                <li class="sortable-item">
+                    <input type="checkbox" th:field="*{options[2].checked}">
+                    <input type="hidden" th:field="*{options[2].name}">
+                    <input type="hidden" th:field="*{options[2].position}" class="position">
+                    <span th:text="*{options[2].name}"></span>
+                    <input type="text" placeholder="phút" th:field="*{desiredTimeMinute}">phút
+                </li>
+                <li class="sortable-item">
+                    <input type="checkbox" th:field="*{options[3].checked}">
+                    <input type="hidden" th:field="*{options[3].name}">
+                    <input type="hidden" th:field="*{options[3].position}" class="position">
+                    <span th:text="*{options[3].name}"></span>
+                    <select th:field="*{desiredNutrition}">
+                        <option value=""></option>
+                        <option value="Rất giàu năng lượng">Rất giàu năng lượng</option>
+                        <option value="Giàu năng lượng">Giàu năng lượng</option>
+                        <option value="Vừa năng lượng">Vừa năng lượng</option>
+                        <option value="Ít năng lượng">Ít năng lượng</option>
+                        <option value="Rất ít năng lượng">Rất ít năng lượng</option>
+                    </select>
+                </li>
+                <li class="sortable-item">
+                    <input type="checkbox" th:field="*{options[4].checked}">
+                    <input type="hidden" th:field="*{options[4].name}">
+                    <input type="hidden" th:field="*{options[4].position}" class="position">
+                    <span th:text="*{options[4].name}"></span>
+                    <select th:field="*{desiredFat}">
+                        <option value=""></option>
+                        <option value="Ăn kiêng">Ăn kiêng</option>
+                        <option value="Ăn bình thường">Ăn bình thường</option>
+                        <option value="Ăn tăng cân">Ăn tăng cân</option>
+                    </select>
+                </li>
+                <li class="sortable-item">
+                    <input type="checkbox" th:field="*{options[5].checked}">
+                    <input type="hidden" th:field="*{options[5].name}">
+                    <input type="hidden" th:field="*{options[5].position}" class="position">
+                    <span th:text="*{options[5].name}"></span>
+                </li>
+            </ul>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var options = document.getElementsByClassName('position');
+                    for (var i = 0; i < options.length; i++) {
+                        options[i].value = i;
+                    }
+                });
+                var sortableList = new Sortable(document.getElementById('sortable-list'), {
+                    animation: 150,
+                    onEnd: function (evt) {
+                        var options = document.getElementsByClassName('position');
+                        for (var i = 0; i < options.length; i++) {
+                            options[i].value = i + 1;
+                        }
+                    }
+                });
+            </script>
+            <div id="id-btn"><button type="submit" id="btn-submit">Enjoy your meal!</button></div>
+            <br>
+        </form>
+
+        <div id="myList">
+            <table>
+                <tr>
+                    <th>Số thứ tự</th>
+                    <th>Tên món ăn</th>
+                    <th>Loại món ăn</th>
+                    <th>Giá cả</th>
+                    <th>Thời gian chuẩn bị</th>
+                    <th>Lượng calories</th>
+                    <th>Lượng chất béo</th>
+                </tr>
+                <tr th:each="dish, stat: ${dishes}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${dish.name}"></td>
+                    <td th:text="${dish.type}"></td>
+                    <td th:text="${dish.price} + ' VND'"></td>
+                    <td th:text="${dish.prepareTime} + ' phút'"></td>
+                    <td th:text="${dish.calories} + ' kcal'"></td>
+                    <td th:text="${dish.fat} + ' g'"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ẹnjoy your meal!</title>
+    <link rel="stylesheet" type="text/css" href="css/result.css">
+</head>
+<body>
+<div class="content">
+    <div th:each="dish, stat: ${suggestDishes}" >
+        <div class="col collumn-3 s-col-full">
+            <div class="buffet-items">
+                <div class="overlay"></div>
+                <div class="buffet-content">
+                    <h4 class="buffet-heading" th:text="${dish.name}"></h4>
+                    <p class="buffet-price" th:text="${dish.price} + ' VND'"></p>
+                    <p class="buffet-description" th:text="${dish.prepareTime} + ' phút'"></p>
+                    <p th:text="${dish.calories} + ' kcal và ' + ${dish.fat} + ' g'"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

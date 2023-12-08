@@ -1,0 +1,41 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Marcellus', serif;
+}
+html {
+    scroll-behavior: smooth;
+}
+.content {
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ead9cf;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.buffet-items {
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgb(0 0 0 / 30%);
+}
+
+.buffet-content {
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    border-radius: 0 0 25px 25px;
+}
+
+.buffet-heading {
+    margin-bottom: 16px;
+}
+
+.collumn-3 {
+    width: 250px;
+    padding: 20px;
+}
