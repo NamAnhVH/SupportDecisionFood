@@ -7,6 +7,7 @@ import com.BTL.SupportDecision.FormData.UserSelectionDto;
 import com.BTL.SupportDecision.Model.Dish;
 import com.BTL.SupportDecision.Model.Meal;
 import com.BTL.SupportDecision.Repository.MealRepository;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,22 @@ public class TableDecisionService {
 
     public static final int NUMBER_OF_ATTRIBUTE = 6;
 
-    private Map<Dish, Double> sastisfactionType;
+    @Getter
+    private Map<Dish, Double> satisfactionType;
+    @Getter
     private Map<Dish, Double> satisfactionBudget;
+    @Getter
     private Map<Dish, Double> satisfactionPreparationTime;
+    @Getter
     private Map<Dish, Double> satisfactionNutrition;
+    @Getter
     private Map<Dish, Double> satisfactionFat;
+    @Getter
     private Map<Dish, Double> satisfactionMealTime;
 
 
-    private final double TIME_PRIORITY_INDEX = 0.95;
-    private final double COST_PRIORITY_INDEX = 0.95;
+    private final double TIME_PRIORITY_INDEX = 0.99;
+    private final double COST_PRIORITY_INDEX = 0.99;
 
     public void createTableDecision(List<Dish> listDish, UserSelectionDto userSelectionDto){
         calculateAttribute(userSelectionDto, listDish);
@@ -39,7 +46,7 @@ public class TableDecisionService {
     }
 
     public void calculateAttributeValueByWeight(AttributeWeightService attributeWeightService) {
-        calculateValueByWeight(sastisfactionType ,attributeWeightService.getSatisfactionTypeWeight());
+        calculateValueByWeight(satisfactionType,attributeWeightService.getSatisfactionTypeWeight());
         calculateValueByWeight(satisfactionBudget ,attributeWeightService.getSatisfactionBudgetWeight());
         calculateValueByWeight(satisfactionPreparationTime ,attributeWeightService.getSatisfactionPreparationTimeWeight());
         calculateValueByWeight(satisfactionNutrition ,attributeWeightService.getSatisfactionNutritionWeight());
@@ -48,7 +55,7 @@ public class TableDecisionService {
     }
 
     private void calculateAttribute(UserSelectionDto userSelectionDto, List<Dish> listDish) {
-        sastisfactionType = calculateSatisfactionType(userSelectionDto.getDesiredType(), listDish);
+        satisfactionType = calculateSatisfactionType(userSelectionDto.getDesiredType(), listDish);
         satisfactionBudget = calculateSatisfactionBudget(userSelectionDto.getBudget(), listDish);
         satisfactionPreparationTime = calculateSatisfactionPreparationTime(userSelectionDto.getDesiredTimeMinute(), listDish);
         satisfactionNutrition = calculateSatisfactionNutrition(userSelectionDto.getDesiredNutrition(), listDish);
@@ -64,47 +71,47 @@ public class TableDecisionService {
     }
 
     private Map<Dish, Double> calculateSatisfactionType(String type, List<Dish> listDish){
-        Map <Dish,Double> sastisfactionAttribute = new Hashtable<>();
+        Map <Dish,Double> satisfactionAttribute = new Hashtable<>();
         for(Dish dish: listDish){
-            sastisfactionAttribute.put(dish, dish.getType().equals(type) ? (double)1 : 0);
+            satisfactionAttribute.put(dish, dish.getType().equals(type) ? (double)1 : 0);
         }
-        return sastisfactionAttribute;
+        return satisfactionAttribute;
     }
 
     private Map<Dish, Double> calculateSatisfactionBudget(int budget, List<Dish> listDish) {
-        Map<Dish, Double> sastisfactionAttribute = new Hashtable<>();
+        Map<Dish, Double> satisfactionAttribute = new Hashtable<>();
         for (Dish dish : listDish) {
             double value = Math.abs(COST_PRIORITY_INDEX * budget - dish.getPrice());
-            sastisfactionAttribute.put(dish, value);
+            satisfactionAttribute.put(dish, value);
         }
-        return sastisfactionAttribute;
+        return satisfactionAttribute;
     }
 
     private Map<Dish, Double> calculateSatisfactionPreparationTime(int minute, List<Dish> listDish){
-        Map <Dish,Double> sastisfactionAttribute = new Hashtable<>();
+        Map <Dish,Double> satisfactionAttribute = new Hashtable<>();
         for(Dish dish: listDish){
             double value = Math.abs(TIME_PRIORITY_INDEX * minute - dish.getPrepareTime());
-            sastisfactionAttribute.put(dish, value);
+            satisfactionAttribute.put(dish, value);
         }
-        return sastisfactionAttribute;
+        return satisfactionAttribute;
     }
 
     private Map<Dish, Double> calculateSatisfactionNutrition(String desiredNutrition, List<Dish> listDish){
-        Map <Dish,Double> sastisfactionAttribute = new Hashtable<>();
+        Map <Dish,Double> satisfactionAttribute = new Hashtable<>();
         for(Dish dish: listDish){
             double value = Math.abs(calculateDesiredNutrition(desiredNutrition) - dish.getCalories());
-            sastisfactionAttribute.put(dish, value);
+            satisfactionAttribute.put(dish, value);
         }
-        return sastisfactionAttribute;
+        return satisfactionAttribute;
     }
 
     private Map<Dish, Double> calculateSatisfactionFat(String desiredFat, List<Dish> listDish){
-        Map <Dish,Double> sastisfactionAttribute = new Hashtable<>();
+        Map <Dish,Double> satisfactionAttribute = new Hashtable<>();
         for(Dish dish: listDish){
             double value = Math.abs(calculateDesiredFat(desiredFat) - dish.getFat());
-            sastisfactionAttribute.put(dish, value);
+            satisfactionAttribute.put(dish, value);
         }
-        return sastisfactionAttribute;
+        return satisfactionAttribute;
     }
 
     private Map<Dish, Double> calculateSatisfactionMealTime(List<Dish> listDish){
@@ -150,47 +157,23 @@ public class TableDecisionService {
     }
 
     private double calculateDesiredNutrition(String desiredNutrition){
-        double amountNutrition = 0;
-        switch (desiredNutrition){
-            case Nutrition.HIGH_CALORIE:
-                amountNutrition = 500;
-                break;
-            case Nutrition.RICH_CALORIE:
-                amountNutrition = 350;
-                break;
-            case Nutrition.STANDARD_CALORIE:
-                amountNutrition = 300;
-                break;
-            case Nutrition.LOW_CALORIE:
-                amountNutrition = 180;
-                break;
-            case Nutrition.LITTLE_CALORIE:
-                amountNutrition = 80;
-                break;
-            default:
-                amountNutrition = 290;
-                break;
-        }
-        return amountNutrition;
+        return switch (desiredNutrition) {
+            case Nutrition.HIGH_CALORIE -> 500;
+            case Nutrition.RICH_CALORIE -> 380;
+            case Nutrition.STANDARD_CALORIE -> 300;
+            case Nutrition.LOW_CALORIE -> 180;
+            case Nutrition.LITTLE_CALORIE -> 80;
+            default -> 290;
+        };
     }
 
     private double calculateDesiredFat(String desiredFat){
-        double amountFat = 0;
-        switch (desiredFat){
-            case Diet.LOSE_WEIGHT:
-                amountFat = 4;
-                break;
-            case Diet.STANDARD:
-                amountFat = 7.5;
-                break;
-            case Diet.GAIN_WEIGHT:
-                amountFat = 12;
-                break;
-            default:
-                amountFat = 9;
-                break;
-        }
-        return amountFat;
+        return switch (desiredFat) {
+            case Diet.LOSE_WEIGHT -> 12.5;
+            case Diet.STANDARD -> 22.5;
+            case Diet.GAIN_WEIGHT -> 27.5;
+            default -> 9;
+        };
     }
 
 
@@ -198,30 +181,6 @@ public class TableDecisionService {
         for(Map.Entry<Dish, Double> attr: attribute.entrySet()){
              attr.setValue(attr.getValue() * weight);
         }
-    }
-
-    public Map<Dish, Double> getSastisfactionType() {
-        return sastisfactionType;
-    }
-
-    public Map<Dish, Double> getSatisfactionBudget() {
-        return satisfactionBudget;
-    }
-
-    public Map<Dish, Double> getSatisfactionPreparationTime() {
-        return satisfactionPreparationTime;
-    }
-
-    public Map<Dish, Double> getSatisfactionNutrition() {
-        return satisfactionNutrition;
-    }
-
-    public Map<Dish, Double> getSatisfactionFat() {
-        return satisfactionFat;
-    }
-
-    public Map<Dish, Double> getSatisfactionMealTime() {
-        return satisfactionMealTime;
     }
 
 }

@@ -43,7 +43,7 @@ public class TopsisService {
 
     private List<Double> getBestSolution(TableDecisionService tableDecisionService) {
         List<Double> bestValue = new ArrayList<>();
-        bestValue.add(getBestSolution(tableDecisionService.getSastisfactionType()));
+        bestValue.add(getBestSolution(tableDecisionService.getSatisfactionType()));
         bestValue.add(getBestSolution(tableDecisionService.getSatisfactionBudget()));
         bestValue.add(getBestSolution(tableDecisionService.getSatisfactionPreparationTime()));
         bestValue.add(getBestSolution(tableDecisionService.getSatisfactionNutrition()));
@@ -54,7 +54,7 @@ public class TopsisService {
 
     private List<Double> getWorstSolution(TableDecisionService tableDecisionService) {
         List<Double> worstValue = new ArrayList<>();
-        worstValue.add(getWorstSolution(tableDecisionService.getSastisfactionType()));
+        worstValue.add(getWorstSolution(tableDecisionService.getSatisfactionType()));
         worstValue.add(getWorstSolution(tableDecisionService.getSatisfactionBudget()));
         worstValue.add(getWorstSolution(tableDecisionService.getSatisfactionPreparationTime()));
         worstValue.add(getWorstSolution(tableDecisionService.getSatisfactionNutrition()));
@@ -83,7 +83,7 @@ public class TopsisService {
         Map<Dish, Double> distanceToBest = new HashMap<>();
         for(Dish dish: listDish){
             List<Double> attributeValues = new ArrayList<>();
-            attributeValues.add(tableDecisionService.getSastisfactionType().get(dish) - bestSolution.get(0));
+            attributeValues.add(tableDecisionService.getSatisfactionType().get(dish) - bestSolution.get(0));
             attributeValues.add(tableDecisionService.getSatisfactionBudget().get(dish) - bestSolution.get(1));
             attributeValues.add(tableDecisionService.getSatisfactionPreparationTime().get(dish) - bestSolution.get(2));
             attributeValues.add(tableDecisionService.getSatisfactionNutrition().get(dish) - bestSolution.get(3));
@@ -102,7 +102,7 @@ public class TopsisService {
         Map<Dish, Double> distanceToWorst = new HashMap<>();
         for(Dish dish: listDish){
             List<Double> attributeValues = new ArrayList<>();
-            attributeValues.add(tableDecisionService.getSastisfactionType().get(dish) - worstSolution.get(0));
+            attributeValues.add(tableDecisionService.getSatisfactionType().get(dish) - worstSolution.get(0));
             attributeValues.add(tableDecisionService.getSatisfactionBudget().get(dish) - worstSolution.get(1));
             attributeValues.add(tableDecisionService.getSatisfactionPreparationTime().get(dish) - worstSolution.get(2));
             attributeValues.add(tableDecisionService.getSatisfactionNutrition().get(dish) - worstSolution.get(3));
